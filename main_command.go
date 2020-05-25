@@ -17,12 +17,16 @@ var runCommand = cli.Command{
 			Usage: "enable tty",
 		},
 		cli.BoolFlag{
-			Name: "d",
+			Name:  "d",
 			Usage: "detach container",
 		},
 		cli.StringFlag{
 			Name:  "v",
 			Usage: "volume",
+		},
+		cli.StringFlag{
+			Name: "name",
+			Usage: "container name",
 		},
 		cli.StringFlag{
 			Name:  "m",
@@ -59,7 +63,8 @@ var runCommand = cli.Command{
 		}
 
 		volume := context.String("v")
-		Run(createTty, cmdArray, volume, resConf)
+		containerName := context.String("name")
+		Run(createTty, cmdArray, volume, containerName, resConf)
 		return nil
 	},
 }
@@ -76,14 +81,23 @@ var initCommand = cli.Command{
 }
 
 var commitCommand = cli.Command{
-	Name: "commit",
+	Name:  "commit",
 	Usage: "commit a container into image",
-	Action: func(context *cli.Context) error{
+	Action: func(context *cli.Context) error {
 		if len(context.Args()) < 1 {
 			return fmt.Errorf("Missage container name")
 		}
 		imageName := context.Args().Get(0)
 		commitContainer(imageName)
+		return nil
+	},
+}
+
+var listCommand = cli.Command{
+	Name: "ps",
+	Usage: "list all the containers",
+	Action: func(context *cli.Context) error {
+		ListContainers()
 		return nil
 	},
 }
