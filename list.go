@@ -36,6 +36,7 @@ func ListContainers() {
 		fmt.Fprintf(w, "%s\t%s\t%s\t%s\t%s\t%s\n",
 			item.Id,
 			item.Name,
+			item.Pid,
 			item.Status,
 			item.Command,
 			item.CreatedTime,
