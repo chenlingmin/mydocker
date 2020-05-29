@@ -10,13 +10,12 @@ import (
 	"os/exec"
 	"strings"
 	_ "mydocker/nsenter"
-
 )
 
 const ENV_EXEC_PID = "mydocker_pid"
-const ENV_EXEC_CMD =  "mydocker_cmd"
+const ENV_EXEC_CMD = "mydocker_cmd"
 
-func ExecContainer(containerName string, comArray []string)  {
+func ExecContainer(containerName string, comArray []string) {
 	pid, err := getContainerPidByName(containerName)
 	if err != nil {
 		log.Errorf("Exec container getContainerPidByName %s error %v", containerName, err)
