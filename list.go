@@ -48,10 +48,10 @@ func ListContainers() {
 	}
 }
 
-func getContainerInfo(file os.FileInfo) (*container.ContainerInfo, error)  {
+func getContainerInfo(file os.FileInfo) (*container.ContainerInfo, error) {
 	containerName := file.Name()
 	configFileDir := fmt.Sprintf(container.DefaultInfoLocation, containerName)
-	configFileDir =  configFileDir + container.ConfigName
+	configFileDir = configFileDir + container.ConfigName
 	content, err := ioutil.ReadFile(configFileDir)
 	if err != nil {
 		log.Errorf("Read file %s error %v", err)
@@ -59,7 +59,7 @@ func getContainerInfo(file os.FileInfo) (*container.ContainerInfo, error)  {
 	var containerInfo container.ContainerInfo
 	if err = json.Unmarshal(content, &containerInfo); err != nil {
 		log.Errorf("Json unmarshal error %v", err)
-		return nil,err
+		return nil, err
 	}
 	return &containerInfo, nil
 }

@@ -26,7 +26,7 @@ var runCommand = cli.Command{
 			Usage: "volume",
 		},
 		cli.StringFlag{
-			Name: "name",
+			Name:  "name",
 			Usage: "container name",
 		},
 		cli.StringFlag{
@@ -50,6 +50,11 @@ var runCommand = cli.Command{
 		for _, arg := range context.Args() {
 			cmdArray = append(cmdArray, arg)
 		}
+
+		// get image name
+		imageName := cmdArray[0]
+		cmdArray = cmdArray[1:]
+
 		createTty := context.Bool("ti")
 		detach := context.Bool("d")
 
@@ -65,7 +70,7 @@ var runCommand = cli.Command{
 
 		volume := context.String("v")
 		containerName := context.String("name")
-		Run(createTty, cmdArray, volume, containerName, resConf)
+		Run(createTty, cmdArray, resConf, containerName, volume, imageName)
 		return nil
 	},
 }
@@ -85,17 +90,18 @@ var commitCommand = cli.Command{
 	Name:  "commit",
 	Usage: "commit a container into image",
 	Action: func(context *cli.Context) error {
-		if len(context.Args()) < 1 {
-			return fmt.Errorf("Missage container name")
+		if len(context.Args()) < 2 {
+			return fmt.Errorf("Missage container name and image name")
 		}
-		imageName := context.Args().Get(0)
-		commitContainer(imageName)
+		containerName := context.Args().Get(0)
+		imageName := context.Args().Get(1)
+		commitContainer(containerName, imageName)
 		return nil
 	},
 }
 
 var listCommand = cli.Command{
-	Name: "ps",
+	Name:  "ps",
 	Usage: "list all the containers",
 	Action: func(context *cli.Context) error {
 		ListContainers()
@@ -104,7 +110,7 @@ var listCommand = cli.Command{
 }
 
 var logCommand = cli.Command{
-	Name: "logs",
+	Name:  "logs",
 	Usage: "print logs of a container",
 	Action: func(context *cli.Context) error {
 		if len(context.Args()) < 1 {
@@ -117,7 +123,7 @@ var logCommand = cli.Command{
 }
 
 var execCommand = cli.Command{
-	Name: "exec",
+	Name:  "exec",
 	Usage: "exec a command into container",
 	Action: func(context *cli.Context) error {
 		if os.Getenv(ENV_EXEC_PID) != "" {
@@ -133,6 +139,31 @@ var execCommand = cli.Command{
 			commandArray = append(commandArray, arg)
 		}
 		ExecContainer(containerName, commandArray)
+		return nil
+	},
+}
+
+var stopCommand = cli.Command{
+	Name:  "stop",
+	Usage: "stop a container",
+	Action: func(context *cli.Context) error {
+		if len(context.Args()) < 1 {
+			return fmt.Errorf("Missing container name")
+		}
+		containerName := context.Args().Get(0)
+		stopContainer(containerName)
+		return nil
+	},
+}
+var removeCommand = cli.Command{
+	Name:  "rm",
+	Usage: "remove unused containers",
+	Action: func(context *cli.Context) error {
+		if len(context.Args()) < 1 {
+			return fmt.Errorf("Missing container name")
+		}
+		containerName := context.Args().Get(0)
+		removeContainer(containerName)
 		return nil
 	},
 }
