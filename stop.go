@@ -5,6 +5,7 @@ import (
 	"fmt"
 	log "github.com/sirupsen/logrus"
 	"io/ioutil"
+	"mydocker/cgroups"
 	"mydocker/container"
 	"os"
 	"strconv"
@@ -79,4 +80,6 @@ func removeContainer(containerName string) {
 		return
 	}
 	container.DeleteWorkSpace(containerInfo.Volume, containerName)
+	cgroupManager := cgroups.NewCgroupManager(containerInfo.Id)
+	cgroupManager.Destroy()
 }

@@ -25,6 +25,10 @@ var runCommand = cli.Command{
 			Name:  "v",
 			Usage: "volume",
 		},
+		cli.StringSliceFlag{
+			Name:  "e",
+			Usage: "set environment",
+		},
 		cli.StringFlag{
 			Name:  "name",
 			Usage: "container name",
@@ -70,7 +74,9 @@ var runCommand = cli.Command{
 
 		volume := context.String("v")
 		containerName := context.String("name")
-		Run(createTty, cmdArray, resConf, containerName, volume, imageName)
+		envSlice := context.StringSlice("e")
+
+		Run(createTty, cmdArray, resConf, containerName, volume, imageName, envSlice)
 		return nil
 	},
 }
@@ -167,5 +173,3 @@ var removeCommand = cli.Command{
 		return nil
 	},
 }
-
-

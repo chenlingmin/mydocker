@@ -14,14 +14,14 @@ import (
 	"time"
 )
 
-func Run(tty bool, comArray []string, res *subsystems.ResourceConfig, containerName, volume, imageName string) {
+func Run(tty bool, comArray []string, res *subsystems.ResourceConfig, containerName, volume, imageName string, envSlice []string) {
 
 	containerID := randStringBytes(10)
 	if containerName == "" {
 		containerName = containerID
 	}
 
-	parent, writePipe := container.NewParentProcess(tty, containerName, volume, imageName)
+	parent, writePipe := container.NewParentProcess(tty, containerName, volume, imageName, envSlice)
 	if parent == nil {
 		log.Errorf("New parent process error")
 		return
@@ -36,8 +36,7 @@ func Run(tty bool, comArray []string, res *subsystems.ResourceConfig, containerN
 		return
 	}
 
-	cgroupManager := cgroups.NewCgroupManager("mydocker-cgroup")
-	defer cgroupManager.Destroy()
+	cgroupManager := cgroups.NewCgroupManager(containerID)
 	cgroupManager.Set(res)
 	cgroupManager.Apply(parent.Process.Pid)
 	sendInitCommand(comArray, writePipe)
@@ -46,6 +45,7 @@ func Run(tty bool, comArray []string, res *subsystems.ResourceConfig, containerN
 		parent.Wait()
 		deleteContainerInfo(containerName)
 		container.DeleteWorkSpace(volume, containerName)
+		cgroupManager.Destroy()
 		os.Exit(0)
 	}
 }
