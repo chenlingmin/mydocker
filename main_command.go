@@ -186,21 +186,20 @@ var removeCommand = cli.Command{
 	},
 }
 
-
 var networkCommand = cli.Command{
-	Name: "network",
+	Name:  "network",
 	Usage: "container network commands",
-	Subcommands: []cli.Command {
+	Subcommands: []cli.Command{
 		{
-			Name: "create",
+			Name:  "create",
 			Usage: "create a container network",
 			Flags: []cli.Flag{
 				cli.StringFlag{
-					Name: "driver",
+					Name:  "driver",
 					Usage: "network driver",
 				},
 				cli.StringFlag{
-					Name: "subnet",
+					Name:  "subnet",
 					Usage: "subnet cidr",
 				},
 			},
@@ -217,7 +216,7 @@ var networkCommand = cli.Command{
 			},
 		},
 		{
-			Name: "list",
+			Name:  "list",
 			Usage: "list container network",
 			Action: func(context *cli.Context) error {
 				network.Init()
@@ -226,7 +225,7 @@ var networkCommand = cli.Command{
 			},
 		},
 		{
-			Name: "remove",
+			Name:  "remove",
 			Usage: "remove container network",
 			Action: func(context *cli.Context) error {
 				if len(context.Args()) < 1 {

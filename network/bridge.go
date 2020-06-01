@@ -21,9 +21,9 @@ func (d *BridgeNetworkDriver) Create(subnet string, name string) (*Network, erro
 	ip, ipRange, _ := net.ParseCIDR(subnet)
 	ipRange.IP = ip
 	n := &Network{
-		Name: name,
+		Name:    name,
 		IpRange: ipRange,
-		Driver: d.Name(),
+		Driver:  d.Name(),
 	}
 	err := d.initBridge(n)
 	if err != nil {
@@ -54,7 +54,7 @@ func (d *BridgeNetworkDriver) Connect(network *Network, endpoint *Endpoint) erro
 
 	endpoint.Device = netlink.Veth{
 		LinkAttrs: la,
-		PeerName: "cif-" + endpoint.ID[:5],
+		PeerName:  "cif-" + endpoint.ID[:5],
 	}
 
 	if err = netlink.LinkAdd(&endpoint.Device); err != nil {
@@ -97,7 +97,7 @@ func (d *BridgeNetworkDriver) initBridge(n *Network) error {
 
 func createBridgeInterface(bridgeName string) error {
 	_, err := net.InterfaceByName(bridgeName)
-	if err == nil || !strings.Contains(err.Error(), "no such network interface"){
+	if err == nil || !strings.Contains(err.Error(), "no such network interface") {
 		return err // todo
 	}
 
@@ -165,4 +165,3 @@ func setupIPTables(bridgeName string, subnet *net.IPNet) error {
 	return err
 
 }
-

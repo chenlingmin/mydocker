@@ -5,13 +5,13 @@ import (
 	"testing"
 )
 
-func TestBridgeInit(t *testing.T)  {
+func TestBridgeInit(t *testing.T) {
 	d := BridgeNetworkDriver{}
 	_, err := d.Create("192.168.0.1/24", "testbridge")
 	t.Logf("err: %v", err)
 }
 
-func TestBridgeConnect(t *testing.T)  {
+func TestBridgeConnect(t *testing.T) {
 	ep := Endpoint{
 		ID: "testcontainer",
 	}
@@ -26,7 +26,7 @@ func TestBridgeConnect(t *testing.T)  {
 
 }
 
-func TestNetworkConnect(t *testing.T)  {
+func TestNetworkConnect(t *testing.T) {
 
 	cInfo := &container.ContainerInfo{
 		Id:  "testcontainer",
@@ -43,7 +43,7 @@ func TestNetworkConnect(t *testing.T)  {
 	t.Logf("err: %v", err)
 }
 
-func TestLoad(t *testing.T)  {
+func TestLoad(t *testing.T) {
 	n := Network{
 		Name: "testbridge",
 	}

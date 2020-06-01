@@ -20,7 +20,7 @@ import (
 var (
 	defaultNetworkPath = "/var/run/mydocker/network/network/"
 	drivers            = map[string]NetworkDriver{}
-	networks = map[string]*Network{}
+	networks           = map[string]*Network{}
 )
 
 type Endpoint struct {
@@ -66,7 +66,6 @@ type NetworkDriver interface {
 	Disconnect(network *Network, endpoint *Endpoint) error
 }
 
-
 func (nw *Network) dump(dumpPath string) error {
 	if _, err := os.Stat(dumpPath); err != nil {
 		if os.IsNotExist(err) {
@@ -77,7 +76,7 @@ func (nw *Network) dump(dumpPath string) error {
 	}
 
 	nwPath := path.Join(dumpPath, nw.Name)
-	nwFile, err := os.OpenFile(nwPath, os.O_TRUNC | os.O_WRONLY | os.O_CREATE, 0644)
+	nwFile, err := os.OpenFile(nwPath, os.O_TRUNC|os.O_WRONLY|os.O_CREATE, 0644)
 	if err != nil {
 		log.Errorf("error： %v", err)
 		return err
@@ -110,7 +109,6 @@ func (nw *Network) remove(dumpPath string) error {
 	}
 }
 
-
 func Init() error {
 
 	var bridgeDriver = BridgeNetworkDriver{}
@@ -133,7 +131,7 @@ func Init() error {
 			Name: nwName,
 		}
 
-		if err:= nw.load(nwPath); err != nil {
+		if err := nw.load(nwPath); err != nil {
 			log.Errorf("error load network: %s", err)
 		}
 		networks[nwName] = nw
@@ -143,7 +141,7 @@ func Init() error {
 	return nil
 }
 
-func CreateNetwork(driver, subnet, name string) error  {
+func CreateNetwork(driver, subnet, name string) error {
 	_, cidr, _ := net.ParseCIDR(subnet)
 	ip, err := ipAllocator.Allocate(cidr)
 	if err != nil {
